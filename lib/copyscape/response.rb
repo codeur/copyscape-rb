@@ -1,9 +1,9 @@
+# frozen_string_literal: true
+
 require 'nokogiri'
 
 module Copyscape
-
   class Response
-
     attr_reader :raw_response
 
     def initialize(buffer)
@@ -17,17 +17,17 @@ module Copyscape
 
     def query_words
       query_words = field('querywords')
-      query_words.to_i if query_words
+      query_words&.to_i
     end
 
     def all_words_matched
       all_words_matched = field('allwordsmatched')
-      all_words_matched.to_i if all_words_matched
+      all_words_matched&.to_i
     end
 
     def all_percent_matched
       all_percent_matched = field('allpercentmatched')
-      all_percent_matched.to_i if all_percent_matched
+      all_percent_matched&.to_i
     end
 
     def all_text_matched
@@ -51,7 +51,7 @@ module Copyscape
 
     # Returns true if there are one or more duplicates
     def duplicate?
-      count > 0
+      count.positive?
     end
 
     # Returns an array of all the results in the form of a hash:
@@ -67,18 +67,15 @@ module Copyscape
 
     # Given a result xml element, return a hash of the values we're interested in.
     def result_to_hash(result)
-      result.children.inject({}) do |hash, node|
+      result.children.each_with_object({}) do |node, hash|
         hash[node.name] = node.text
         hash[node.name] = node.text.to_i if node.text && node.text =~ /^\d+$/
-        hash
       end
     end
 
     def field(name)
       node = @document.search(name).first
-      node.text if node
+      node&.text
     end
-
   end
-
 end

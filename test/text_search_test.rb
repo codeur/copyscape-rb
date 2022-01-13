@@ -1,10 +1,10 @@
-require File.dirname(__FILE__) + '/test_helper'
+# frozen_string_literal: true
 
-class TextSearchTest < Test::Unit::TestCase
+require 'test_helper'
 
-  context "request_url" do
-    
-    should "have the correct url" do
+class TextSearchTest < Minitest::Test
+  context 'request_url' do
+    should 'have the correct url' do
       Copyscape::TextSearch.expects(:post).once.returns(url_search_response_duplicate).with do |path, options|
         params = options[:body]
         assert_equal '/', path
@@ -17,13 +17,12 @@ class TextSearchTest < Test::Unit::TestCase
       @search = Copyscape::TextSearch.new('this is some text')
     end
   end
-  
+
   private
 
   def url_search_response_duplicate
     o = Object.new
-    o.stubs(:body).returns(File.read(File.expand_path('../url_search_response_duplicate.xml', __FILE__)))
+    o.stubs(:body).returns(File.read(File.expand_path('url_search_response_duplicate.xml', __dir__)))
     o
   end
-
 end

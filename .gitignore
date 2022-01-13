@@ -1,3 +1,10 @@
-pkg/
+/.bundle/
+/.yardoc
+/_yardoc/
+/coverage/
+/doc/
+/pkg/
+/spec/reports/
+/tmp/
 .DS_store
-.rbenv-version
+.ruby-version

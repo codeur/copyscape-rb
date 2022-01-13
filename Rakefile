@@ -1,13 +1,12 @@
-require 'bundler'
-Bundler::GemHelper.install_tasks
+# frozen_string_literal: true
 
-$LOAD_PATH.unshift 'lib'
+require 'bundler/gem_tasks'
+require 'rake/testtask'
 
-task :default => :test
-
-desc "Run tests"
-task :test do
-  Dir['test/*_test.rb'].each do |f|
-    require File.expand_path(f)
-  end
+Rake::TestTask.new(:test) do |t|
+  t.libs << 'test'
+  t.libs << 'lib'
+  t.test_files = FileList['test/**/*_test.rb']
 end
+
+task default: :test
